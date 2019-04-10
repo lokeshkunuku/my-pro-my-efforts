@@ -6,12 +6,12 @@ struct Process_Data
 {
 	int Num;
 	int Pid;  //Process Id
-	int A_time; //Process Arrival Time
-	int B_time; //Process Bruest Time
+	int Arrivaltime; //Process Arrival Time
+	int Brusttime; //Process Bruest Time
 	int Priority; //Process Priority
-	int F_time; //Process Finish Time
+	int Finishtime; //Process Finish Time
 	int R_time; //Process Remaining  Time During Execution
-	int W_time; //Waiting Time
+	int Waitingtime; //Waiting Time
 	int S_time; //Process start Time
 	int Res_time;
 
@@ -27,9 +27,9 @@ bool idsort(const P_d& x , const P_d& y)
 /** Sorting on the base of arrival time if that match then on Priority of Priority also  match than on the base of Process Id**/
 bool arrivalsort( const P_d& x ,const P_d& y)
 {
-	if(x.A_time < y.A_time)
+	if(x.Arrivaltime < y.Arrivaltime)
 		return true;
-	else if(x.A_time > y.A_time)
+	else if(x.Arrivaltime > y.Arrivaltime)
 		return false;
 	if(x.Priority < y.Priority)
 		return true;
@@ -42,7 +42,7 @@ bool arrivalsort( const P_d& x ,const P_d& y)
 }
 
 
-bool Numsort( const P_d& x ,const P_d& y)
+bool numbersort( const P_d& x ,const P_d& y)
 {
 	return x.Num < y.Num;
 }
@@ -69,7 +69,7 @@ void my_check(vector<P_d> mv)
 {
 	for(unsigned int i= 0; i < mv.size() ;i++)
 	{
-		cout<<" Pid :"<<mv[i].Pid<<" _time : "<<mv[i].A_time<<" B_time : "<<mv[i].B_time<<" Priority : "<<mv[i].Priority<<endl;
+		cout<<" Pid :"<<mv[i].Pid<<" _time : "<<mv[i].Arrivaltime<<" Brusttime : "<<mv[i].Brusttime<<" Priority : "<<mv[i].Priority<<endl;
 	}
 
 }
@@ -82,8 +82,8 @@ int main()
 	P_d temp;
 	int pq_process = 0; // for PQ process
 	int rq_process = 0; // for RQ process
-	int A_time;
-	int B_time;
+	int Arrivaltime;
+	int Brusttime;
 	int Pid;
 	int Priority;
 	int n;
@@ -92,11 +92,11 @@ int main()
 	cin>>n;
 	for( i= 0; i< n; i++ )
 	{
-		cin>>Pid>>A_time>>B_time>>Priority;
+		cin>>Pid>>Arrivaltime>>Brusttime>>Priority;
 		temp.Num = i+1;
-		temp.A_time = A_time;
-		temp.B_time = B_time;
-		temp.R_time = B_time;
+		temp.Arrivaltime = Arrivaltime;
+		temp.Brusttime = Brusttime;
+		temp.R_time = Brusttime;
 		temp.Pid = Pid;
 		temp.Priority = Priority;
 		input.push_back(temp);
@@ -105,17 +105,17 @@ int main()
 	sort( input.begin(), input.end(), arrivalsort );
     //cout<<"arrivalsort : "<<endl;
     //my_check( input ); // To check the sort unomment it
-    total_exection_time = total_exection_time + input[0].A_time;
+    total_exection_time = total_exection_time + input[0].Arrivaltime;
     for( i= 0 ;i< n; i++ )
     {
-    	if( total_exection_time >= input[i].A_time )
+    	if( total_exection_time >= input[i].Arrivaltime )
     	{
-    		total_exection_time = total_exection_time +input[i].B_time;
+    		total_exection_time = total_exection_time +input[i].Brusttime;
     	}
     	else
     	{
-    		int diff = (input[i].A_time - total_exection_time);
-    		total_exection_time = total_exection_time + diff + B_time;
+    		int diff = (input[i].Arrivaltime - total_exection_time);
+    		total_exection_time = total_exection_time + diff + Brusttime;
 
     	}
     }
@@ -140,7 +140,7 @@ int main()
 		/**Insert the process with same Arrival time in Priority Queue**/
 		for( int j = 0; j< n ; j++ )
 		{
-			if(clock == input[j].A_time)
+			if(clock == input[j].Arrivaltime)
 			{
 				pq.push(input[j]);
 			}
@@ -230,7 +230,7 @@ int main()
 		{
 			if(Ghant[k]==i+1)
 			{
-				input[i].F_time=k+1;
+				input[i].Finishtime=k+1;
 				break;
 
 			}
@@ -249,18 +249,18 @@ int main()
 		}
 	}
 	
-	sort( input.begin(), input.end(), Numsort );
+	sort( input.begin(), input.end(), numbersort );
 
 	for(int i=0;i<n;i++)
 	{
-		input[i].Res_time=input[i].S_time-input[i].A_time;
-		input[i].W_time=(input[i].F_time-input[i].A_time)-input[i].B_time;
+		input[i].Res_time=input[i].S_time-input[i].Arrivaltime;
+		input[i].Waitingtime=(input[i].Finishtime-input[i].Arrivaltime)-input[i].Brusttime;
 
 	}
 	
 	for(int i=0;i<n;i++)
 	{
-		cout<<input[i].Pid<<" "<<input[i].Res_time<<" "<<input[i].F_time<<" "<<input[i].W_time<<endl;
+		cout<<input[i].Pid<<" "<<input[i].Res_time<<" "<<input[i].Finishtime<<" "<<input[i].Waitingtime<<endl;
 		
 	}	
 	return 0;
